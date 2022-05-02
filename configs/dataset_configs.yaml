@@ -1,0 +1,66 @@
+datasets:
+  utd_mhad:
+    n_classes: 27
+    n_subjects: 8
+    inertial: # These will be passed as kwargs to the LightningModule class for inertial models.
+      in_channels: 6
+      out_size: 27
+    skeleton: # These will be passed as kwargs to the LightningModule class for skeleton models.
+      input_channels: 3
+      n_joints: 20
+      output_size: 27
+      dataset: utd_mhad
+      center_joint: 2
+    main_metric: accuracy
+    class_names: ["swipe_left", "swipe_right", "wave", "clap", "throw", "arm_cross",
+                  "basketball_shoot", "draw_x", "draw_circle_cw", "draw_circle_ccw",
+                  "draw_triangle", "bowling", "boxing", "baseball_swing",
+                  "tennis_swing", "arm_curl", "tennis_serve", "push", "knock",
+                  "catch", "pickup_throw", "jog", "walk", "sit2stand", "stand2sit",
+                  "lunge", "squat"]
+    protocols:
+      cross_subject:
+        train:
+          subject: [1, 3, 5]
+        val:
+          subject: [7]
+        test:
+          subject: [2, 4, 6, 8]
+
+  mmact:
+    n_classes: 36
+    n_subjects: 20
+    inertial: # These will be passed as kwargs to the LightningModule class for inertial models.
+      in_channels: 12
+      out_size: 36
+    skeleton: # These will be passed as kwargs to the LightningModule class for skeleton models.
+      input_channels: 2
+      n_joints: 17
+      output_size: 36
+      dataset: mmact
+      center_joint: 0
+    main_metric: f1-score
+    class_names: ["carrying", "checking_time", "closing", "crouching", "entering", "exiting",
+                  "fall", "jumping", "kicking", "loitering", "looking_around", "opening",
+                  "picking_up", "pointing", "pulling", "pushing", "running", "setting_down",
+                  "standing", "talking", "talking_on_phone", "throwing", "transferring_object",
+                  "using_phone", "walking", "waving_hand", "drinking", "pocket_in", "pocket_out",
+                  "sitting", "sitting_down", "standing_up", "using_pc", "using_phone", "carrying_heavy",
+                  "carrying_light"]
+    protocols:
+      cross_subject:
+        train:
+          subject: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+        val:
+          subject: [13, 14, 15]
+        test:
+          subject: [17, 18, 19, 20]
+      cross_scene:
+        train:
+          scene: [1, 3, 4]
+          subject: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+        val:
+          scene: [1, 3, 4]
+          subject: [17, 18, 19, 20]
+        test:
+          scene: [2]

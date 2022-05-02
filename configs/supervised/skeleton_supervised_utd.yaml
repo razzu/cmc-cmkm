@@ -1,0 +1,67 @@
+experiment:
+  seed: 28
+  num_epochs: 100
+
+modalities:
+  skeleton:
+    model:
+      cooccurrence:
+        class_name: SupervisedSkeletonCooccurenceModel
+        from_module: skeleton_coocurrence
+        args: [] # These will be passed as positional args to the LightningModule class.
+        kwargs: # These will be passed as kwargs to the LightningModule class.
+          batch_size: 64
+          out_channels: [64, 32, 32, 64, 128, 256]
+          kernel_sizes: [[1, 1], [3, 1], [3, 3], [3, 3], [3, 3], [3, 3]]
+          max_pool_sizes: [null, null, 2, 2, 2, 2]
+          sample_length: 50
+          lr: 0.001
+          optimizer_name: adam
+          metric_name: accuracy
+    transforms:
+      - class_name: VariableLengthRandomCrop
+        from_module: skeleton_transforms
+        in_test: false
+        kwargs:
+          crop_p: 0.7
+      - class_name: RecenterJoints
+        from_module: skeleton_transforms
+        in_test: true
+        kwargs:
+          anchor_joint_index: 2
+      - class_name: NormalizeDistances
+        from_module: skeleton_transforms
+        in_test: true
+        kwargs:
+          anchor_joint_1_index: 1
+          anchor_joint_2_index: 2
+      - class_name: SkeletonSampler
+        from_module: skeleton_transforms
+        transform_name: sampling
+        in_test: true
+        kwargs:
+          size: 50
+      - class_name: ToTensor
+        from_module: general_transforms
+        in_test: true
+      - class_name: Jittering
+        from_module: inertial_augmentations
+        in_test: false
+        kwargs:
+          sigma: 0.01
+      - class_name: Permute
+        from_module: general_transforms
+        in_test: true
+        kwargs:
+          shape: [1, 2, 0]
+      - class_name: RandomRotation
+        from_module: skeleton_transforms
+        in_test: false
+        kwargs:
+          dimensions: 3
+          start: -5
+          end: 5
+          step: 1
+      - class_name: ToFloat
+        from_module: general_transforms
+        in_test: true

@@ -1,0 +1,36 @@
+# Based on https://wandb.ai/self-supervised-mmhar/sweep-ssl-skeleton-mmact/runs/37wsp4vj/overview?workspace=user-rbrinzea
+
+jittering:
+  apply: true
+  parameters:
+    sigma: 0.1
+  probability: 1
+crop_and_resize:
+  apply: true
+  parameters:
+    min_p: 0.7
+    max_p: 0.8
+    size: 50
+  probability: 0.75
+scaling:
+  apply: true
+  parameters:
+    dimensions: 2
+    min_p: 0.7
+    max_p: 1.2
+  probability: 0.75
+rotation:
+  apply: true
+  parameters:
+    dimensions: 2
+    start: -15
+    end: 15
+    step: 2
+    anchor_joint: 2
+  probability: 0.75
+shear:
+  apply: true
+  parameters:
+    dimensions: 2
+    beta: 0.2
+  probability: 0.75

@@ -1,0 +1,89 @@
+# These values will overwrite the ones in the individual model configuration files.
+experiment:
+  seed: 28
+  num_epochs_ssl: 100
+  num_epochs_fine_tuning: 100
+  batch_size_fine_tuning: 64
+
+ssl:
+  args: []
+  kwargs:
+    temperature: 0.1
+    sample_length: 50
+    batch_size: 128
+    hidden: [256, 128]
+    lr: 0.001
+    optimizer_name_ssl: "adam"
+
+modalities:
+  inertial:
+    model:
+      transformer:
+        class_name: SupervisedTransformer
+        from_module: inertial
+        encoder_class_name: CNNTransformer
+        encoder_name: cnn_transformer
+        args: []
+        kwargs:
+          sample_length: 50
+          kernel_size: 5
+          out_channels: [32, 64, 128]
+          num_head: 2
+          num_attn_layers: 2
+          lr: 0.001
+          optimizer_name: "adam"
+    transforms:
+      - class_name: InertialSampler
+        from_module: inertial_transforms
+        transform_name: sampling
+        in_test: true
+        kwargs:
+          size: 50
+      - class_name: ToTensor
+        from_module: general_transforms
+        transform_name: to_tensor
+        in_test: true
+      - class_name: Permute
+        from_module: general_transforms
+        transform_name: permutation
+        in_test: true
+        kwargs:
+          shape: [1, 0]
+      - class_name: ToFloat
+        transform_name: to_float
+        from_module: general_transforms
+        in_test: true
+
+  skeleton:
+    model:
+      cooccurrence:
+        class_name: SupervisedSkeletonCooccurenceModel
+        from_module: skeleton_coocurrence
+        encoder_class_name: SkeletonCooccurenceBlocks
+        encoder_name: blocks
+        args: [] # These will be passed as positional args to the LightningModule class.
+        kwargs: # These will be passed as kwargs to the LightningModule class.
+          out_channels: [64, 32, 32, 64, 128, 256]
+          kernel_sizes: [[1, 1], [3, 1], [3, 3], [3, 3], [3, 3], [3, 3]]
+          max_pool_sizes: [null, null, 2, 2, 2, 2]
+          sample_length: 50
+          lr: 0.001
+          optimizer_name: adam
+    transforms:
+      - class_name: SkeletonSampler
+        from_module: skeleton_transforms
+        transform_name: sampling
+        in_test: true
+        kwargs:
+          size: 50
+      - class_name: ToTensor
+        from_module: general_transforms
+        in_test: true
+      - class_name: Permute
+        from_module: general_transforms
+        in_test: true
+        kwargs:
+          shape: [1, 2, 0]
+      - class_name: ToFloat
+        from_module: general_transforms
+        in_test: true

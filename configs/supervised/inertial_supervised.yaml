@@ -1,0 +1,54 @@
+experiment:
+  seed: 28
+  num_epochs: 100
+    
+modalities:
+  inertial:
+    model:
+      cnn1d:
+        class_name: SupervisedCNN1D
+        from_module: inertial
+        args: []
+        kwargs:
+          batch_size: 64
+          lr: 0.001
+          sample_length: 50
+          optimizer_name: "adam"
+          metric_name: "accuracy"
+      transformer:
+        class_name: SupervisedTransformer
+        from_module: inertial
+        encoder_class_name: CNNTransformer
+        encoder_name: cnn_transformer
+        args: []
+        kwargs:
+          batch_size: 64
+          lr: 0.001
+          sample_length: 50
+          kernel_size: 5
+          out_channels: [32, 64, 128]
+          num_head: 2
+          num_attn_layers: 2
+          optimizer_name: "adam"
+          metric_name: "accuracy"
+    transforms:
+      - class_name: InertialSampler
+        from_module: inertial_transforms
+        transform_name: sampling
+        in_test: true
+        kwargs:
+          size: 50
+      - class_name: ToTensor
+        from_module: general_transforms
+        transform_name: to_tensor
+        in_test: true
+      - class_name: Permute
+        from_module: general_transforms
+        transform_name: permutation
+        in_test: true
+        kwargs:
+          shape: [1, 0]
+      - class_name: ToFloat
+        transform_name: to_float
+        from_module: general_transforms
+        in_test: true

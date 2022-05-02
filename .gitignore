@@ -1,0 +1,15 @@
+# Python
+.ipynb_checkpoints
+__pycache__/
+# Logs
+lightning_logs/
+tb_logs/
+logs/
+wandb/
+# Project specific
+snapshots/
+model_weights/
+# results
+semi_sup_results/
+precomputed_similarities/
+shared_models
