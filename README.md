@@ -1,6 +1,11 @@
 # Self-supervised Multimodal HAR
 
 ![Contrastive Multiview Coding with Cross-Modal Knowledge Mining (CMKM)](cmkm.png)
+
+[to be published in IEEE WCCI 2022 (IJCNN 2022 track)]
+
+Links: [[arXiv]](https://arxiv.org/abs/2205.10071) 
+
 This repository contains work on performing supervised and self-supervised multimodal human activity recognition (HAR) using a variety of different datasets, modalities and approaches.
 
 The framework used across the repository is [Pytorch Lightning](https://www.pytorchlightning.ai/). Logging is performed using [Weights and Biases](https://wandb.ai/).
